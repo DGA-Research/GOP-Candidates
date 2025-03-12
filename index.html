@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GOP Candidate Avoidance Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="gameContainer">
+    <canvas id="gameCanvas"></canvas>
+    <div id="score">Score: 0</div>
+    <div id="gameOver">
+      <div id="gameOverText">Game Over</div>
+      <div id="gameOverMessage"></div>
+      <button onclick="location.reload()">Restart</button>
+    </div>
+    <div id="startScreen">
+      <!-- Candidate selection images will be loaded dynamically from config.json -->
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
