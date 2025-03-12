@@ -4,7 +4,7 @@
       "height": 600
     },
     "playerSpeed": 300,
-    "enemySpeed": 300,
+    "enemySpeed": 200,
     "playerRadius": 40,
     "enemyRadius": 40,
     "winScore": 30,
