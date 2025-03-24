@@ -33,6 +33,24 @@ window.addEventListener('keyup', (e) => {
   keysPressed[e.key] = false;
 });
 
+// Mobile control listeners
+function setupMobileControls() {
+  const upBtn = document.getElementById("upBtn");
+  const downBtn = document.getElementById("downBtn");
+  const leftBtn = document.getElementById("leftBtn");
+  const rightBtn = document.getElementById("rightBtn");
+
+  // Prevent default touch behavior and simulate key presses
+  upBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowUp"] = true; });
+  upBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowUp"] = false; });
+  downBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowDown"] = true; });
+  downBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowDown"] = false; });
+  leftBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowLeft"] = true; });
+  leftBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowLeft"] = false; });
+  rightBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowRight"] = true; });
+  rightBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowRight"] = false; });
+}
+
 // Candidate class for both player and enemies
 class Candidate {
   constructor(x, y, imageSrc, name, isPlayer = false) {
@@ -43,8 +61,8 @@ class Candidate {
     this.name = name;
     this.isPlayer = isPlayer;
     if (!isPlayer) {
-        this.vx = (Math.random() * 2 - 1) * enemySpeed;
-        this.vy = (Math.random() * 2 - 1) * enemySpeed;
+      this.vx = (Math.random() * 2 - 1) * enemySpeed;
+      this.vy = (Math.random() * 2 - 1) * enemySpeed;
     }
   }
   
@@ -81,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(config => {
       configData = config;
       initializeFromConfig();
+      setupMobileControls(); // Set up mobile control event listeners
     })
     .catch(err => {
       console.error("Error loading config:", err);
