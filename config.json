@@ -1,35 +1,34 @@
 {
-    "canvas": {
-      "width": 800,
-      "height": 600
+  "canvas": {
+    "width": 800,
+    "height": 600
+  },
+  "playerSpeed": 300,
+  "enemySpeed": 200,
+  "playerRadius": 40,
+  "enemyRadius": 40,
+  "winScore": 30,
+  "winMessage": "You Win! Congratulations!",
+  "candidates": [
+    {
+      "name": "Candidate 1",
+      "src": "https://miro.medium.com/v2/resize:fit:1400/1*4_QNjnDolyUCd7k7hrGL6A.png"
     },
-    "playerSpeed": 300,
-    "enemySpeed": 200,
-    "playerRadius": 40,
-    "enemyRadius": 40,
-    "winScore": 30,
-    "winMessage": "You Win! Congratulations!",
-    "candidates": [
-      {
-        "name": "Candidate 1",
-        "src": "https://miro.medium.com/v2/resize:fit:1400/1*4_QNjnDolyUCd7k7hrGL6A.png"
-      },
-      {
-        "name": "Candidate 2",
-        "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRioRQAg7z3XPVwKafoxbTHtWAvFK3T2n_qAyI-roLd1m432I7ap6MeKHntCnjXw5dqVho&usqp=CAU"
-      },
-      {
-        "name": "Candidate 3",
-        "src": "https://assets.promptbase.com/DALLE_IMAGES%2FUoqM975QECh2uGWmToFgwBa4i4c2%2Fresized%2F1730847022090t_1000x1000.webp?alt=media&token=02c4a7d0-ba52-411d-babd-245f52efee6d"
-      },
-      {
-        "name": "Candidate 4",
-        "src": "https://miro.medium.com/v2/resize:fit:1874/1*QEq4QYXrWr0g-2Hyo-4O4w.png"
-      },
-      {
-        "name": "Candidate 5",
-        "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeEJWTQahLE9MeWDZAHlUiwUETQNnnIfvkow&s"
-      }
-    ]
-  }
-  
+    {
+      "name": "Candidate 2",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRioRQAg7z3XPVwKafoxbTHtWAvFK3T2n_qAyI-roLd1m432I7ap6MeKHntCnjXw5dqVho&usqp=CAU"
+    },
+    {
+      "name": "Candidate 3",
+      "src": "https://assets.promptbase.com/DALLE_IMAGES%2FUoqM975QECh2uGWmToFgwBa4i4c2%2Fresized%2F1730847022090t_1000x1000.webp?alt=media&token=02c4a7d0-ba52-411d-babd-245f52efee6d"
+    },
+    {
+      "name": "Candidate 4",
+      "src": "https://miro.medium.com/v2/resize:fit:1874/1*QEq4QYXrWr0g-2Hyo-4O4w.png"
+    },
+    {
+      "name": "Candidate 5",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeEJWTQahLE9MeWDZAHlUiwUETQNnnIfvkow&s"
+    }
+  ]
+}
