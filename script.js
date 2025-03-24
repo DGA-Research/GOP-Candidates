@@ -33,22 +33,43 @@ window.addEventListener('keyup', (e) => {
   keysPressed[e.key] = false;
 });
 
-// Mobile control listeners
+// Mobile control listeners supporting both mouse and touch events
 function setupMobileControls() {
   const upBtn = document.getElementById("upBtn");
   const downBtn = document.getElementById("downBtn");
   const leftBtn = document.getElementById("leftBtn");
   const rightBtn = document.getElementById("rightBtn");
 
-  // Prevent default touch behavior and simulate key presses
-  upBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowUp"] = true; });
-  upBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowUp"] = false; });
-  downBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowDown"] = true; });
-  downBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowDown"] = false; });
-  leftBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowLeft"] = true; });
-  leftBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowLeft"] = false; });
-  rightBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keysPressed["ArrowRight"] = true; });
-  rightBtn.addEventListener("touchend", (e) => { e.preventDefault(); keysPressed["ArrowRight"] = false; });
+  // Helper function to add both mouse and touch events
+  function addControlEvents(button, keyName) {
+    // Mouse events for PC
+    button.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = true;
+    });
+    button.addEventListener("mouseup", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = false;
+    });
+    button.addEventListener("mouseleave", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = false;
+    });
+    // Touch events for mobile
+    button.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = true;
+    });
+    button.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = false;
+    });
+  }
+
+  addControlEvents(upBtn, "ArrowUp");
+  addControlEvents(downBtn, "ArrowDown");
+  addControlEvents(leftBtn, "ArrowLeft");
+  addControlEvents(rightBtn, "ArrowRight");
 }
 
 // Candidate class for both player and enemies
@@ -92,14 +113,14 @@ class Candidate {
   }
 }
 
-// Load config.json and then initialize the game
+// Load config.json and initialize the game once
 document.addEventListener("DOMContentLoaded", () => {
   fetch('config.json')
     .then(response => response.json())
     .then(config => {
       configData = config;
       initializeFromConfig();
-      setupMobileControls(); // Set up mobile control event listeners
+      setupMobileControls(); // Set up both mouse and touch event listeners
     })
     .catch(err => {
       console.error("Error loading config:", err);
