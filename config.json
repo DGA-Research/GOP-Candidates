@@ -7,7 +7,7 @@
     "enemySpeed": 200,
     "playerRadius": 40,
     "enemyRadius": 40,
-    "winScore": 30,
+    "winScore": 100,
     "winMessage": "You Win! Congratulations!",
     "candidates": [
       {
