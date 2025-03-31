@@ -33,6 +33,45 @@ window.addEventListener('keyup', (e) => {
   keysPressed[e.key] = false;
 });
 
+// Mobile control listeners supporting both mouse and touch events
+function setupMobileControls() {
+  const upBtn = document.getElementById("upBtn");
+  const downBtn = document.getElementById("downBtn");
+  const leftBtn = document.getElementById("leftBtn");
+  const rightBtn = document.getElementById("rightBtn");
+
+  // Helper function to add both mouse and touch events
+  function addControlEvents(button, keyName) {
+    // Mouse events for PC
+    button.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = true;
+    });
+    button.addEventListener("mouseup", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = false;
+    });
+    button.addEventListener("mouseleave", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = false;
+    });
+    // Touch events for mobile
+    button.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = true;
+    });
+    button.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      keysPressed[keyName] = false;
+    });
+  }
+
+  addControlEvents(upBtn, "ArrowUp");
+  addControlEvents(downBtn, "ArrowDown");
+  addControlEvents(leftBtn, "ArrowLeft");
+  addControlEvents(rightBtn, "ArrowRight");
+}
+
 // Candidate class for both player and enemies
 class Candidate {
   constructor(x, y, imageSrc, name, isPlayer = false) {
@@ -43,8 +82,9 @@ class Candidate {
     this.name = name;
     this.isPlayer = isPlayer;
     if (!isPlayer) {
-        this.vx = (Math.random() * 2 - 1) * enemySpeed;
-        this.vy = (Math.random() * 2 - 1) * enemySpeed;
+      // Initialize with random velocity
+      this.vx = (Math.random() * 2 - 1) * enemySpeed;
+      this.vy = (Math.random() * 2 - 1) * enemySpeed;
     }
   }
   
@@ -52,12 +92,21 @@ class Candidate {
     if (!this.isPlayer) {
       this.x += this.vx * dt;
       this.y += this.vy * dt;
-      // Bounce off canvas edges
-      if (this.x < enemyRadius || this.x > canvasWidth - enemyRadius) {
-        this.vx *= -1;
+      
+      // Bounce off canvas edges with position correction and slight random perturbation
+      if (this.x < enemyRadius) {
+        this.x = enemyRadius;
+        this.vx = Math.abs(this.vx) + (Math.random() - 0.5) * 20;
+      } else if (this.x > canvasWidth - enemyRadius) {
+        this.x = canvasWidth - enemyRadius;
+        this.vx = -Math.abs(this.vx) + (Math.random() - 0.5) * 20;
       }
-      if (this.y < enemyRadius || this.y > canvasHeight - enemyRadius) {
-        this.vy *= -1;
+      if (this.y < enemyRadius) {
+        this.y = enemyRadius;
+        this.vy = Math.abs(this.vy) + (Math.random() - 0.5) * 20;
+      } else if (this.y > canvasHeight - enemyRadius) {
+        this.y = canvasHeight - enemyRadius;
+        this.vy = -Math.abs(this.vy) + (Math.random() - 0.5) * 20;
       }
     }
   }
@@ -74,13 +123,14 @@ class Candidate {
   }
 }
 
-// Load config.json and then initialize the game
+// Load config.json and initialize the game once
 document.addEventListener("DOMContentLoaded", () => {
   fetch('config.json')
     .then(response => response.json())
     .then(config => {
       configData = config;
       initializeFromConfig();
+      setupMobileControls(); // Set up both mouse and touch event listeners
     })
     .catch(err => {
       console.error("Error loading config:", err);
@@ -124,10 +174,16 @@ function initializeFromConfig() {
       // Create player in the center
       player = new Candidate(canvasWidth / 2, canvasHeight / 2, candidateImageSrc, candidateName, true);
       // Create enemy candidates from the remaining selections
+      const minDistanceFromPlayer = 150; // minimum distance from center
       candidateElements.forEach(cand => {
         if (cand.src !== candidateImageSrc) {
-          const ex = Math.random() * (canvasWidth - enemyRadius * 2) + enemyRadius;
-          const ey = Math.random() * (canvasHeight - enemyRadius * 2) + enemyRadius;
+          let ex, ey, distance;
+          // Recalculate position until it's a safe distance from the center
+          do {
+            ex = Math.random() * (canvasWidth - enemyRadius * 2) + enemyRadius;
+            ey = Math.random() * (canvasHeight - enemyRadius * 2) + enemyRadius;
+            distance = Math.sqrt(Math.pow(ex - canvasWidth / 2, 2) + Math.pow(ey - canvasHeight / 2, 2));
+          } while (distance < minDistanceFromPlayer);
           enemies.push(new Candidate(ex, ey, cand.src, cand.getAttribute('data-name')));
         }
       });
@@ -135,6 +191,50 @@ function initializeFromConfig() {
       gameRunning = true;
       lastTime = performance.now();
       requestAnimationFrame(gameLoop);
+    });
+  });
+
+  function updateCanvasSize() {
+    const container = document.getElementById('gameContainer');
+    const rect = container.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    // Optionally update your global variables (canvasWidth, canvasHeight)
+    canvasWidth = rect.width;
+    canvasHeight = rect.height;
+  }
+  
+  window.addEventListener("resize", updateCanvasSize);
+  updateCanvasSize();
+  
+
+  // Responsive design: update canvas dimensions and scale candidate positions on window resize
+  window.addEventListener("resize", () => {
+    const container = document.getElementById('gameContainer');
+    const rect = container.getBoundingClientRect();
+    // Record old dimensions to compute scale factors
+    const oldWidth = canvasWidth;
+    const oldHeight = canvasHeight;
+    
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    
+    // Compute scale factors
+    const scaleX = rect.width / oldWidth;
+    const scaleY = rect.height / oldHeight;
+    
+    // Update global dimensions
+    canvasWidth = rect.width;
+    canvasHeight = rect.height;
+    
+    // Scale positions of player and enemies
+    if (player) {
+      player.x *= scaleX;
+      player.y *= scaleY;
+    }
+    enemies.forEach(enemy => {
+      enemy.x *= scaleX;
+      enemy.y *= scaleY;
     });
   });
 }
