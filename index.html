@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <title>GOP Candidate Avoidance Game</title>
   <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+  <header id="gameHeader">
+    <h1>GOP Candidate Avoidance Game</h1>
+    <p>Use the on‑screen arrows below to move your candidate. Avoid the enemies and reach a score of 30 to win!</p>
+  </header>
   <div id="gameContainer">
     <canvas id="gameCanvas"></canvas>
     <div id="score">Score: 0</div>
@@ -16,6 +21,15 @@
     </div>
     <div id="startScreen">
       <!-- Candidate selection images will be loaded dynamically from config.json -->
+    </div>
+  </div>
+  <!-- Moved mobile controls outside the game container -->
+  <div id="mobileControls">
+    <button id="upBtn">&#9650;</button>
+    <div class="row">
+      <button id="leftBtn">&#9664;</button>
+      <button id="downBtn">&#9660;</button>
+      <button id="rightBtn">&#9654;</button>
     </div>
   </div>
   <script src="script.js"></script>
